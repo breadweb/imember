@@ -11,7 +11,7 @@ Date: 10/19/2018 23:35:08
 
 ### TL;DR:
 
-This is a small .NET application that saves location and size of all open application windows and restores them when display settings change. It mimics what MacOS does for free: It saves arrangements for a display configuration and restores as displays disconnect and reconnect.  
+This is a small .NET application that saves location and size of all open application windows and restores them when display settings change. It mimics the behavior I've noticed of MacOS when displays disconnect and reconnect.  
 
 ![](https://github.com/breadweb/imember/blob/master/images/imember.png) 
 
@@ -19,7 +19,7 @@ This is a small .NET application that saves location and size of all open applic
 
 ### Download
 
-Please feel free to use this application if you'd find it useful. I have only tested it on my PC and with my hardware so your experience may be different. If you find any bugs, please let me know! 
+Please feel free to use this app if you'd find it useful. I have only tested it on my PC and with my hardware so your experience may be different. If you find any bugs, please let me know! 
 
 Right-click the following link and select "Save link as..."
 
@@ -29,15 +29,15 @@ Right-click the following link and select "Save link as..."
 
 ### How to Use
 
-Simply start the application and it will minimize to the system tray. Click the tray icon to show the window or right click and choose "Exit" to exit the application.  When running, the app saves configuration of your windows every 60 seconds. If you want to save your configuration instantly, click the "Save Now" button.
+Simply start the app and it will minimize to the system tray. Click the tray icon to show the window or right click and choose "Exit" to exit the app completely.  When running, the app saves configuration of your windows every 60 seconds. If you want to save your configuration instantly, click the "Save Now" button.
 
 <br>
 
 ### More Info
 
-I use a dual 4K displayport KVM switch to share my two monitors between my PC and my MacBook Pro.  The switch is great except that it does not do monitor emulation. When the monitors switch to my MacBook, Windows looses connection and sets the display configuration to one monitor at 640x480. This resizes all windows to fit in that small area and shoves everything in the top right corner. When I switch back to my PC and the monitors are dectected and resolution resotred, the windows aren't. My MacBook Pro is smart enough to restore window positions and size, however. 
+I use a dual 4K displayport KVM switch to share my two monitors between my PC and my MacBook Pro.  The switch is great except that it does not do monitor emulation. When the monitors switch to my MacBook, Windows looses connection and sets the display configuration to one monitor at 640x480. This resizes all windows to fit in that small area and shoves everything in the top left corner. When I switch back to my PC and the monitors are dectected and resolution is resotred, the windows aren't. That was super tilting... My MacBook Pro is smart enough to restore window positions so why can't Windows do the same? 
 
-I tried looking for an application that would save and restore window arragements but couldn't find one that did only that. Usually that feature was packed into an app that wasn't free, or that came with dozens of extra features that I didn't want. 
+I tried looking for an application that would save and restore window arragements but couldn't find one that did only that. Usually that feature was packed into an app that wasn't free, or that came with dozens of extra features that I didn't want. This was annoying me multiple times a day so I took an afternoon to make this app. :)
 
 <br>
 
