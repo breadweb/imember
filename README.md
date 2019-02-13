@@ -1,7 +1,7 @@
 ## I Member! v0.0.1
 https://github.com/breadweb/imember
 
-Copyright (c) 2013 - 2019, Adam "Bread" Slesinger http://www.breadweb.net
+Copyright (c) 2019, Adam "Bread" Slesinger http://www.breadweb.net
 
 All rights reserved.
 
