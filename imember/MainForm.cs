@@ -88,15 +88,17 @@ namespace imember
             else
             {
                 int totalScreens = Screen.AllScreens.Length;
-                Log("Restoring last known configuration for {0} monitors...", totalScreens);
-                RestoreWindows(totalScreens - 1);
+                int indexToRestore = totalScreens - 1;
+                Log("Restoring last known arrangement for {0} monitors...", totalScreens);
+                RestoreWindows(indexToRestore);
             }
         }
 
         private void SaveWindows()
         {
-            indexToSave = Screen.AllScreens.Length - 1;
-            Log("Saving current configuration for {0} monitors...", indexToSave);
+            int totalMonitors = Screen.AllScreens.Length;
+            indexToSave = totalMonitors - 1;
+            Log("Saving current configuration for {0} monitors...", totalMonitors);
             arrangements[indexToSave] = new Dictionary<int, Rect>();
             EnumWindows(new WindowEnumCallback(this.GetVisibleWindows), 0);
         }
@@ -104,6 +106,11 @@ namespace imember
         private void RestoreWindows(int indexToRestore)
         {
             Dictionary<int, Rect> arrangement = arrangements[indexToRestore];
+            if (arrangement == null)
+            {
+                Log("We don't have an arrangement for {0} monitors yet!", indexToRestore + 1);
+                return;
+            }
 
             const short SWP_NOZORDER = 0X4;
             const int SWP_NOACTIVATE = 0x0010;
@@ -147,13 +154,15 @@ namespace imember
 
         private void Log(string message)
         {
-            consoleLines.Enqueue(string.Format("{0} {1}", DateTime.Now.ToString("G"), message));
+            message = string.Format("{0} {1}", DateTime.Now.ToString("G"), message);
+            consoleLines.Enqueue(message);
             if (consoleLines.Count > CONSOLE_MAX_LINES - 1)
             {
                 consoleLines.Dequeue();
             }
             txtConsole.Lines = consoleLines.ToArray();
             txtConsole.ScrollToCaret();
+            Console.WriteLine(message);
         }
 
         private void OnSaveTimer(object sender, EventArgs e)
