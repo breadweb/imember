@@ -65,7 +65,7 @@ private void checkBox1_CheckedChanged(object sender, EventArgs e)
 
 There are some Microsoft apps that are "cloaked" and don't need to saved or restored since they don't have a window that is visible to the user. I'll need to figure out how to identify cloaked apps and exclude them.
 
-Additionally, this could be optimized by only saving configurations when display settings are about to change instead of on an interval. It would be less processing and also avoid an issue where the most recent configuration is not saved before displays change. To do that, I need to address the problem identified in the comments:
+The program could be optimized by only saving configurations when display settings are about to change instead of on an interval. It would be less processing and also avoid an issue where the most recent configuration is not saved before displays change. To do that, I need to address the problem identified in the comments:
 
 ```
 // Saves the current window arrangement on an interval. This is a lazy solution to a problem
@@ -75,3 +75,5 @@ Additionally, this could be optimized by only saving configurations when display
 // event fires which is after scaling is reapplied. We could try to figure out the DPI and
 // adjust all positions and sizes, but this works well enough for now.
 ```
+
+I want to add a checkbox to temporarily disable the app while it is running since there are some instances where I don't want positions saved and restored. This is usually when I'm playing games and have two monitors active, but one monitor's resolution is changed by the game when it is running.
