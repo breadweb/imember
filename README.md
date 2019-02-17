@@ -11,7 +11,7 @@ Date: 2/13/2019 9:21:45
 
 ### TL;DR:
 
-This is a small .NET application that saves location and size of all open application windows and restores them when display settings change. It mimics the behavior you get for free with MacOS when displays disconnect and reconnect.  
+This is a small .NET application that saves location and size of all open application windows and restores them when display settings change. It mimics the behavior you get for free with macOS when displays disconnect and reconnect.  
 
 ![](https://github.com/breadweb/imember/blob/master/images/imember.png) 
 
