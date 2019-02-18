@@ -13,18 +13,15 @@ namespace imember
     {
         // Maximum monitor arrangements.
         private const int MAX_SUPPORTED_MONITORS = 5;
-
         // Interval to save current window arrangement, in milliseconds.
         private const int SAVE_INTERVAL = 60000;
-
         private const string REG_ENTRY = "imember";
-
         private const int CONSOLE_MAX_LINES = 100;
 
         private Queue<string> consoleLines;
-
         private int indexToSave = 0;
         private Timer saveTimer;
+        private bool isEnabled = true;
 
         // An array of dictionaries of window arrangements. Each index in the array represents
         // an arragement for a monitor configuration where number of monitors = index. The dictionary
@@ -79,10 +76,13 @@ namespace imember
             }
             else
             {
-                int totalScreens = Screen.AllScreens.Length;
-                int indexToRestore = totalScreens - 1;
-                Log("Restoring last known arrangement for {0} monitors...", totalScreens);
-                RestoreWindows(indexToRestore);
+                if (isEnabled)
+                {
+                    int totalScreens = Screen.AllScreens.Length;
+                    int indexToRestore = totalScreens - 1;
+                    Log("Restoring last known arrangement for {0} monitors...", totalScreens);
+                    RestoreWindows(indexToRestore);
+                }
             }
         }
 
@@ -193,9 +193,25 @@ namespace imember
 
         private void OnSaveTimer(object sender, EventArgs e)
         {
-            if (!AreAllDisconnected())
+            if (!AreAllDisconnected() && isEnabled)
             {                
                 SaveWindows(true);
+            }
+        }
+
+        private void ToggleEnabled()
+        {
+            if (isEnabled)
+            {
+                isEnabled = false;
+                toolStripMenuItem2.Text = "Enable";
+                btnSaveNow.Enabled = false;
+            }
+            else
+            {
+                isEnabled = true;
+                toolStripMenuItem2.Text = "Disable";
+                btnSaveNow.Enabled = true;
             }
         }
 
@@ -298,7 +314,20 @@ namespace imember
 
         private void btnSaveNow_Click(object sender, EventArgs e)
         {
-            SaveWindows(true);
+            if (isEnabled)
+            {
+                SaveWindows(true);
+            }            
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            ToggleEnabled();
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            ToggleEnabled();
         }
     }
 }

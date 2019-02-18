@@ -33,6 +33,7 @@
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.picMember = new System.Windows.Forms.PictureBox();
             this.picLogo = new System.Windows.Forms.PictureBox();
@@ -41,6 +42,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtConsole = new System.Windows.Forms.TextBox();
             this.btnSaveNow = new System.Windows.Forms.Button();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picMember)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -60,27 +62,35 @@
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1});
+            this.toolStripMenuItem1,
+            this.toolStripMenuItem2});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(93, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(113, 48);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(92, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(112, 22);
             this.toolStripMenuItem1.Text = "Exit";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(112, 22);
+            this.toolStripMenuItem2.Text = "Disable";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.Font = new System.Drawing.Font("Verdana", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox1.Location = new System.Drawing.Point(24, 416);
-            this.checkBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBox1.Location = new System.Drawing.Point(88, 416);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(413, 27);
+            this.checkBox1.Size = new System.Drawing.Size(278, 27);
             this.checkBox1.TabIndex = 2;
-            this.checkBox1.Text = "Run automatically when Windows starts";
+            this.checkBox1.Text = "Run when Windows starts";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
@@ -90,7 +100,7 @@
             this.picMember.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.picMember.Image = ((System.Drawing.Image)(resources.GetObject("picMember.Image")));
             this.picMember.Location = new System.Drawing.Point(24, 16);
-            this.picMember.Margin = new System.Windows.Forms.Padding(2);
+            this.picMember.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.picMember.Name = "picMember";
             this.picMember.Size = new System.Drawing.Size(400, 344);
             this.picMember.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -101,8 +111,8 @@
             // 
             this.picLogo.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picLogo.Image = ((System.Drawing.Image)(resources.GetObject("picLogo.Image")));
-            this.picLogo.Location = new System.Drawing.Point(64, 456);
-            this.picLogo.Margin = new System.Windows.Forms.Padding(2);
+            this.picLogo.Location = new System.Drawing.Point(64, 472);
+            this.picLogo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.picLogo.Name = "picLogo";
             this.picLogo.Size = new System.Drawing.Size(300, 141);
             this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -165,12 +175,28 @@
             this.btnSaveNow.UseVisualStyleBackColor = true;
             this.btnSaveNow.Click += new System.EventHandler(this.btnSaveNow_Click);
             // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Checked = true;
+            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox2.Font = new System.Drawing.Font("Verdana", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox2.Location = new System.Drawing.Point(88, 440);
+            this.checkBox2.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(105, 27);
+            this.checkBox2.TabIndex = 12;
+            this.checkBox2.Text = "Enabled";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(449, 656);
             this.Controls.Add(this.txtConsole);
+            this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.btnSaveNow);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnConsole);
@@ -178,7 +204,7 @@
             this.Controls.Add(this.picLogo);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.picMember);
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.ShowInTaskbar = false;
@@ -206,6 +232,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtConsole;
         private System.Windows.Forms.Button btnSaveNow;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.CheckBox checkBox2;
     }
 }
 
