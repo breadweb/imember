@@ -116,6 +116,9 @@ namespace imember
             Rect rect = new Rect();
             rect.Left = this.Bounds.Left;
             rect.Top = this.Bounds.Top;
+            rect.Right = this.Bounds.Right;
+            rect.Bottom = this.Bounds.Bottom;
+
             SaveWindow(indexToSave, rect, Process.GetCurrentProcess().MainWindowHandle, this.Name, shouldLogArrangement);
 
             // Save all open file explorer windows.
@@ -201,24 +204,21 @@ namespace imember
 
         private void ToggleEnabled()
         {
-            if (isEnabled)
-            {
-                isEnabled = false;
-                toolStripMenuItem2.Text = "Enable";
-                btnSaveNow.Enabled = false;
-            }
-            else
-            {
-                isEnabled = true;
-                toolStripMenuItem2.Text = "Disable";
-                btnSaveNow.Enabled = true;
-            }
+            isEnabled = !isEnabled;
+            UpdateEnabledDisplay();
+        }
+
+        private void UpdateEnabledDisplay()
+        {
+            toolStripMenuItem2.Text = isEnabled ? "Disable" : "Enable";
+            checkBox2.Checked = isEnabled;
+            btnSaveNow.Enabled = isEnabled;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
-            this.Hide();
+            UpdateEnabledDisplay();
 
             lblAbout.Text = "Windows may forget the position and" + Environment.NewLine + "size of all your windows, but I member!";
 
@@ -258,15 +258,15 @@ namespace imember
             if (this.WindowState == FormWindowState.Minimized)
             {
                 notifyIcon.Visible = true;
-                this.Hide();
             }
         }
 
         private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            this.WindowState = FormWindowState.Normal;
-            this.BringToFront();
-            this.Show();
+            if (e.Button == MouseButtons.Left)
+            {
+                this.WindowState = FormWindowState.Normal;
+            }
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -325,7 +325,7 @@ namespace imember
             ToggleEnabled();
         }
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        private void checkBox2_Click(object sender, EventArgs e)
         {
             ToggleEnabled();
         }

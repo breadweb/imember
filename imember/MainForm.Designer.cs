@@ -86,7 +86,7 @@
             this.checkBox1.AutoSize = true;
             this.checkBox1.Font = new System.Drawing.Font("Verdana", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox1.Location = new System.Drawing.Point(88, 416);
-            this.checkBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(278, 27);
             this.checkBox1.TabIndex = 2;
@@ -100,7 +100,7 @@
             this.picMember.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.picMember.Image = ((System.Drawing.Image)(resources.GetObject("picMember.Image")));
             this.picMember.Location = new System.Drawing.Point(24, 16);
-            this.picMember.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.picMember.Margin = new System.Windows.Forms.Padding(2);
             this.picMember.Name = "picMember";
             this.picMember.Size = new System.Drawing.Size(400, 344);
             this.picMember.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -112,7 +112,7 @@
             this.picLogo.Cursor = System.Windows.Forms.Cursors.Hand;
             this.picLogo.Image = ((System.Drawing.Image)(resources.GetObject("picLogo.Image")));
             this.picLogo.Location = new System.Drawing.Point(64, 472);
-            this.picLogo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.picLogo.Margin = new System.Windows.Forms.Padding(2);
             this.picLogo.Name = "picLogo";
             this.picLogo.Size = new System.Drawing.Size(300, 141);
             this.picLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -188,7 +188,7 @@
             this.checkBox2.TabIndex = 12;
             this.checkBox2.Text = "Enabled";
             this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.checkBox2.Click += new System.EventHandler(this.checkBox2_Click);
             // 
             // MainForm
             // 
@@ -204,7 +204,7 @@
             this.Controls.Add(this.picLogo);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.picMember);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.ShowInTaskbar = false;
