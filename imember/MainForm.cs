@@ -28,26 +28,17 @@ namespace imember
         // An array of dictionaries of window arrangements. Each index in the array represents
         // an arragement for a monitor configuration where number of monitors = index. The dictionary
         // is a collection of window position/size rectangles with window processes as the keys.
-        private Dictionary<int, Rect>[] arrangements;
+        private Dictionary<IntPtr, Rect>[] arrangements;
 
-        public delegate bool WindowEnumCallback(int hWnd, int lparam);
+        [DllImport("user32.dll")]
+        public static extern void GetWindowText(IntPtr hWnd, StringBuilder s, int nMaxCount);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool EnumWindows(WindowEnumCallback lpEnumFunc, int lParam);
-
-        [DllImport("user32.dll")]
-        public static extern void GetWindowText(int hWnd, StringBuilder s, int nMaxCount);
-
-        [DllImport("user32.dll")]
-        public static extern bool IsWindowVisible(int hWnd);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetWindowRect(int hWnd, out Rect lpRect);
+        static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
 
         [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
-        public static extern IntPtr SetWindowPos(int hWnd, int hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
+        public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
 
         private struct Rect
         {
@@ -73,7 +64,7 @@ namespace imember
 
         public MainForm()
         {
-            arrangements = new Dictionary<int, Rect>[MAX_SUPPORTED_MONITORS];
+            arrangements = new Dictionary<IntPtr, Rect>[MAX_SUPPORTED_MONITORS];
             consoleLines = new Queue<string>(CONSOLE_MAX_LINES);
 
             InitializeComponent();
@@ -94,18 +85,37 @@ namespace imember
             }
         }
 
-        private void SaveWindows()
+        private void SaveWindows(bool shouldLogArrangement)
         {
             int totalMonitors = Screen.AllScreens.Length;
             indexToSave = totalMonitors - 1;
             Log("Saving current configuration for {0} monitors...", totalMonitors);
-            arrangements[indexToSave] = new Dictionary<int, Rect>();
-            EnumWindows(new WindowEnumCallback(this.GetVisibleWindows), 0);
+            arrangements[indexToSave] = new Dictionary<IntPtr, Rect>();
+
+            Process[] arrProcess = Process.GetProcesses();
+            foreach (Process process in arrProcess)
+            {
+                if (!string.IsNullOrEmpty(process.MainWindowTitle))
+                {
+                    // No need to applications that are suspsended since they don't have a visible window. 
+                    ProcessThread thread = process.Threads[0];
+                    if (!(thread.ThreadState == ThreadState.Wait && thread.WaitReason == ThreadWaitReason.Suspended))
+                    {
+                        Rect rect = new Rect();
+                        GetWindowRect(process.MainWindowHandle, out rect);
+                        arrangements[indexToSave][process.MainWindowHandle] = rect;
+                        if (shouldLogArrangement)
+                        {
+                            Log("Saving position and size of {0} window.", process.ProcessName);
+                        }
+                    }
+                }
+            }
         }
 
         private void RestoreWindows(int indexToRestore)
         {
-            Dictionary<int, Rect> arrangement = arrangements[indexToRestore];
+            Dictionary<IntPtr, Rect> arrangement = arrangements[indexToRestore];
             if (arrangement == null)
             {
                 Log("We don't have an arrangement for {0} monitors yet!", indexToRestore + 1);
@@ -115,7 +125,7 @@ namespace imember
             const short SWP_NOZORDER = 0X4;
             const int SWP_NOACTIVATE = 0x0010;
 
-            foreach (KeyValuePair<int, Rect> entry in arrangement)
+            foreach (KeyValuePair<IntPtr, Rect> entry in arrangement)
             {
                 StringBuilder sb = new StringBuilder(1024);
                 GetWindowText(entry.Key, sb, sb.Capacity);
@@ -125,17 +135,6 @@ namespace imember
                 }
                 SetWindowPos(entry.Key, 0, entry.Value.Left, entry.Value.Top, entry.Value.Width, entry.Value.Height, SWP_NOZORDER | SWP_NOACTIVATE);
             }
-        }
-
-        private bool GetVisibleWindows(int hWnd, int lparam)
-        {
-            if (IsWindowVisible(hWnd))
-            {
-                Rect rect = new Rect();
-                GetWindowRect(hWnd, out rect);
-                arrangements[indexToSave][hWnd] = rect;
-            }
-            return true;
         }
 
         private bool AreAllDisconnected()
@@ -169,7 +168,7 @@ namespace imember
         {
             if (!AreAllDisconnected())
             {                
-                SaveWindows();
+                SaveWindows(true);
             }
         }
 
@@ -272,7 +271,7 @@ namespace imember
 
         private void btnSaveNow_Click(object sender, EventArgs e)
         {
-            SaveWindows();
+            SaveWindows(true);
         }
     }
 }
