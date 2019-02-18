@@ -68,6 +68,11 @@ namespace imember
             InitializeComponent();
         }
 
+        private void SystemEvents_DisplaySettingsChanging(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
         private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
         {
             if (AreAllDisconnected())
@@ -238,6 +243,7 @@ namespace imember
             // This event does NOT trigger when a monitor is turned off via the monitor controls
             // for some monitors most likely due to the monitors providing emulation on power off. 
             SystemEvents.DisplaySettingsChanged += new EventHandler(SystemEvents_DisplaySettingsChanged);
+            SystemEvents.DisplaySettingsChanging += new EventHandler(SystemEvents_DisplaySettingsChanging);
 
             // Saves the current window arrangement on an interval. This is a lazy solution to a problem
             // with the display events. The SystemEvents.DisplaySettingsChanging event fires after user
