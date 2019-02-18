@@ -1,17 +1,17 @@
 ## I Member! v0.0.1
 https://github.com/breadweb/imember
 
-Copyright (c) 2013 - 2019, Adam "Bread" Slesinger http://www.breadweb.net
+Copyright (c) 2019, Adam "Bread" Slesinger http://www.breadweb.net
 
 All rights reserved.
 
-Date: 10/19/2018 23:35:08
+Date: 2/13/2019 9:21:45
 
 <br>
 
 ### TL;DR:
 
-This is a small .NET application that saves location and size of all open application windows and restores them when display settings change. It mimics the behavior I've noticed of MacOS when displays disconnect and reconnect.  
+This is a small .NET application that saves location and size of all open application windows and restores them when display settings change. It mimics the behavior you get for free with macOS when displays disconnect and reconnect.  
 
 ![](https://github.com/breadweb/imember/blob/master/images/imember.png) 
 
@@ -35,13 +35,13 @@ Simply start the app and it will minimize to the system tray. Click the tray ico
 
 ### More Info
 
-I use a dual 4K displayport KVM switch to share my two monitors between my PC and my MacBook Pro.  The switch is great except that it does not do monitor emulation. When the monitors switch to my MacBook, Windows looses connection and sets the display configuration to one monitor at 640x480. This resizes all windows to fit in that small area and shoves everything in the top left corner. When I switch back to my PC and the monitors are dectected and resolution is resotred, the windows aren't. That was super tilting... My MacBook Pro is smart enough to restore window positions so why can't Windows do the same? 
+I use a dual 4K displayport KVM switch to share my two monitors between my PC and my MacBook Pro.  The switch is great except that it does not do monitor emulation. When the monitors switch to my MacBook, Windows looses connection and sets the display configuration to one monitor at 640x480. This resizes all windows to fit in that small area and shoves everything in the top left corner. When I switch back to my PC and the monitors are dectected and resolution is resotred, the windows aren't. This is super tilting especially when my MacBook Pro is smart enough to restore last-known window positions and sizes.
 
 I tried looking for an application that would save and restore window arragements but couldn't find one that did only that. Usually that feature was packed into an app that wasn't free, or that came with dozens of extra features that I didn't want. This was annoying me multiple times a day so I took an afternoon to make this app. :)
 
 <br>
 
-### Known Issues
+### Known Issues and Future Optimizations
 
 I added an option to set a registry key so the app will start when Windows starts. Using this caused my anti-virus to freak out and quarantinne the application and I was required to add an exception. If you click that checkbox multiple times in quick succession, Windows also thinks something is suspicious and will block further attempts until your reboot. The code for this is below:
 
@@ -62,3 +62,18 @@ private void checkBox1_CheckedChanged(object sender, EventArgs e)
     }
 }
 ```
+
+There are some Microsoft apps that are "cloaked" and don't need to saved or restored since they don't have a window that is visible to the user. I'll need to figure out how to identify cloaked apps and exclude them.
+
+The program could be optimized by only saving configurations when display settings are about to change instead of on an interval. It would be less processing and also avoid an issue where the most recent configuration may not be saved before displays change. To do that, I need to address the problem identified in the comments:
+
+```
+// Saves the current window arrangement on an interval. This is a lazy solution to a problem
+// with the display events. The SystemEvents.DisplaySettingsChanging event fires after user
+// display scaling (such as 150% typically used on 4K monitors) resets and so positions saved
+// at that time would not be correct when applied after the SystemEvents.DisplaySettingsChanged
+// event fires which is after scaling is reapplied. We could try to figure out the DPI and
+// adjust all positions and sizes, but this works well enough for now.
+```
+
+I want to add a checkbox to temporarily disable the app while it is running since there are some instances where I don't want positions saved and restored. This is usually when I'm playing games and have two monitors active, but one monitor's resolution is changed by the game when it is running.
