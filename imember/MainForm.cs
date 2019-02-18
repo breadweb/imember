@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using SHDocVw;
 
 namespace imember
 {
@@ -92,24 +93,53 @@ namespace imember
             Log("Saving current configuration for {0} monitors...", totalMonitors);
             arrangements[indexToSave] = new Dictionary<IntPtr, Rect>();
 
-            Process[] arrProcess = Process.GetProcesses();
-            foreach (Process process in arrProcess)
+            Process[] processes = Process.GetProcesses();
+            foreach (Process process in processes)
             {
-                if (!string.IsNullOrEmpty(process.MainWindowTitle))
+                // If a main window title is missing, it is usually a background process.
+                if (string.IsNullOrEmpty(process.MainWindowTitle))
                 {
-                    // No need to applications that are suspsended since they don't have a visible window. 
-                    ProcessThread thread = process.Threads[0];
-                    if (!(thread.ThreadState == ThreadState.Wait && thread.WaitReason == ThreadWaitReason.Suspended))
-                    {
-                        Rect rect = new Rect();
-                        GetWindowRect(process.MainWindowHandle, out rect);
-                        arrangements[indexToSave][process.MainWindowHandle] = rect;
-                        if (shouldLogArrangement)
-                        {
-                            Log("Saving position and size of {0} window.", process.ProcessName);
-                        }
-                    }
+                    continue;
                 }
+
+                // Windows Store applications have a main window title but may be suspended and not visible.
+                ProcessThread thread = process.Threads[0];
+                if (thread.ThreadState == ThreadState.Wait && thread.WaitReason == ThreadWaitReason.Suspended)
+                {
+                    continue;
+                }
+
+                SaveWindow(indexToSave, GetWindowRect(process.MainWindowHandle), process.MainWindowHandle, process.ProcessName, shouldLogArrangement);
+            }
+
+            // Save this application's location.
+            Rect rect = new Rect();
+            rect.Left = this.Bounds.Left;
+            rect.Top = this.Bounds.Top;
+            SaveWindow(indexToSave, rect, Process.GetCurrentProcess().MainWindowHandle, this.Name, shouldLogArrangement);
+
+            // Save all open file explorer windows.
+            ShellWindows shellWindows = new SHDocVw.ShellWindows();
+            foreach (InternetExplorer window in shellWindows)
+            {
+                SaveWindow(indexToSave, GetWindowRect((IntPtr)window.HWND), (IntPtr)window.HWND, window.Name, shouldLogArrangement);
+            }
+
+        }
+
+        private Rect GetWindowRect(IntPtr hWnd)
+        {
+            Rect rect = new Rect();
+            GetWindowRect(hWnd, out rect);
+            return rect;
+        }
+
+        private void SaveWindow(int indexToSave, Rect rect, IntPtr hWnd, string windowName, bool shouldLogArrangement)
+        {
+            arrangements[indexToSave][hWnd] = rect;
+            if (shouldLogArrangement)
+            {
+                Log("Saving {0} at {1}:", windowName, rect.ToString());
             }
         }
 
@@ -129,10 +159,7 @@ namespace imember
             {
                 StringBuilder sb = new StringBuilder(1024);
                 GetWindowText(entry.Key, sb, sb.Capacity);
-                if (sb.Length > 0)
-                {
-                    Log("-> Restoring {0} to {1}", sb.ToString(), entry.Value.ToString());
-                }
+                Log("-> Restoring {0} to {1}", sb.ToString(), entry.Value.ToString());
                 SetWindowPos(entry.Key, 0, entry.Value.Left, entry.Value.Top, entry.Value.Width, entry.Value.Height, SWP_NOZORDER | SWP_NOACTIVATE);
             }
         }
