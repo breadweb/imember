@@ -29,7 +29,19 @@ Right-click the following link and select "Save link as..."
 
 ### How to Use
 
-Simply start the app and it will minimize to the system tray. Click the tray icon to show the window or right click and choose "Exit" to exit the app completely.  When running, the app saves configuration of your windows every 60 seconds. If you want to save your configuration instantly, click the "Save Now" button.
+Start imember and it will minimize to the system tray. Click the system tray icon to bring up the imember window.
+
+When running, imember saves arrangement of your windows every minute.
+
+If you want to save your arrangement instantly, click the "Save Now" button on the imember window.
+
+You can tempoararily disable imemeber by deselecting the "Enabled" checkbox. This is handy if you're going to be running applications that change the resolution and you don't want window arrangements to be saved when that happens.
+
+To have imember start when Windows starts, enable the checkbox on the imember window.
+
+To completely close the application, right-click on the system tray icon and select "Exit".
+   
+
 
 <br>
 
@@ -63,9 +75,7 @@ private void checkBox1_CheckedChanged(object sender, EventArgs e)
 }
 ```
 
-There are some Microsoft apps that are "cloaked" and don't need to saved or restored since they don't have a window that is visible to the user. I'll need to figure out how to identify cloaked apps and exclude them.
-
-The program could be optimized by only saving configurations when display settings are about to change instead of on an interval. It would be less processing and also avoid an issue where the most recent configuration may not be saved before displays change. To do that, I need to address the problem identified in the comments:
+The program could be optimized by only saving arrangements when display settings are about to change instead of on an interval. It would be less processing and also avoid an issue where the most recent arrangement may not be saved before displays change. To do that, I need to address the problem identified in the comments:
 
 ```
 // Saves the current window arrangement on an interval. This is a lazy solution to a problem
@@ -75,5 +85,3 @@ The program could be optimized by only saving configurations when display settin
 // event fires which is after scaling is reapplied. We could try to figure out the DPI and
 // adjust all positions and sizes, but this works well enough for now.
 ```
-
-I want to add a checkbox to temporarily disable the app while it is running since there are some instances where I don't want positions saved and restored. This is usually when I'm playing games and have two monitors active, but one monitor's resolution is changed by the game when it is running.
