@@ -22,6 +22,7 @@ namespace imember
         private int indexToSave = 0;
         private Timer saveTimer;
         private bool isEnabled = true;
+        private bool isNotifyClicked = false;
 
         // An array of dictionaries of window arrangements. Each index in the array represents
         // an arragement for a monitor configuration where number of monitors = index. The dictionary
@@ -70,7 +71,7 @@ namespace imember
 
         private void SystemEvents_DisplaySettingsChanging(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized;
+            this.Visible = false;
         }
 
         private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
@@ -89,6 +90,11 @@ namespace imember
                     RestoreWindows(indexToRestore);
                 }
             }
+        }
+
+        protected override void SetVisibleCore(bool value)
+        {
+            base.SetVisibleCore(this.isNotifyClicked ? value : this.isNotifyClicked);
         }
 
         private void SaveWindows(bool shouldLogArrangement)
@@ -222,10 +228,7 @@ namespace imember
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized;
             UpdateEnabledDisplay();
-
-            lblAbout.Text = "Windows may forget the position and" + Environment.NewLine + "size of all your windows, but I member!";
 
             RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if (rk.GetValue(REG_ENTRY) != null)
@@ -261,7 +264,7 @@ namespace imember
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            if (this.WindowState == FormWindowState.Minimized)
+            if (!this.Visible)
             {
                 notifyIcon.Visible = true;
             }
@@ -271,7 +274,8 @@ namespace imember
         {
             if (e.Button == MouseButtons.Left)
             {
-                this.WindowState = FormWindowState.Normal;
+                this.isNotifyClicked = true;
+                this.Visible = !this.Visible;
             }
         }
 
@@ -308,8 +312,8 @@ namespace imember
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
+                this.Visible = false;
                 e.Cancel = true;
-                this.WindowState = FormWindowState.Minimized;
             }
         }
 
@@ -334,6 +338,20 @@ namespace imember
         private void checkBox2_Click(object sender, EventArgs e)
         {
             ToggleEnabled();
+        }
+
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            if (isEnabled)
+            {
+                SaveWindows(true);
+            }
+        }
+
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            ToggleEnabled();
+            toolStripMenuItem4.Text = isEnabled ? "Disable" : "Enable";
         }
     }
 }
