@@ -23,7 +23,7 @@ Please feel free to use this app if you'd find it useful. I have only tested it 
 
 Right-click the following link and select "Save link as..."
 
-[imember-v0.0.1.zip](https://github.com/breadweb/imember/releases/download/0.0.1/imember-v0.0.1.zip) (93 KB)
+[imember-v1.0.0.zip](https://github.com/breadweb/imember/releases/download/1.0.0/imember-v1.0.0.zip) (96 KB)
 
 <br>
 
