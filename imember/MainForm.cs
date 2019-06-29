@@ -17,6 +17,7 @@ namespace imember
         private const int SAVE_INTERVAL = 60000;
         private const string REG_ENTRY = "imember";
         private const int CONSOLE_MAX_LINES = 100;
+        private const string runPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
 
         private Queue<string> consoleLines;
         private int indexToSave = 0;
@@ -230,12 +231,6 @@ namespace imember
         {
             UpdateEnabledDisplay();
 
-            RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            if (rk.GetValue(REG_ENTRY) != null)
-            {
-                checkBox1.Checked = true;
-            }
-
             // Watch event for when displays have changed.
             //
             // This event trigger when signal is lost or restored due to a KVM switch change
@@ -276,20 +271,10 @@ namespace imember
             {
                 this.isNotifyClicked = true;
                 this.Visible = !this.Visible;
-            }
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-
-            if (checkBox1.Checked)
-            {
-                rk.SetValue(REG_ENTRY, Application.ExecutablePath);
-            }
-            else
-            {
-                rk.DeleteValue(REG_ENTRY, false);
+                if (this.Visible)
+                {
+                    this.Activate();
+                }
             }
         }
 
